@@ -9,4 +9,6 @@ export const baseUrl = 'https://bayut.p.rapidapi.com'
             'X-RapidAPI-Host': 'bayut.p.rapidapi.com'
           }
     })
+
+    return data
   }
