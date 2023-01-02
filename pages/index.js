@@ -5,6 +5,7 @@ import { Flex, Box, Text, Button } from '@chakra-ui/react'
 import Property from '../components/Property'
 
 import { baseUrl, fetchApi } from '../utils/fetchApi'
+import { useEffect } from 'react'
 
 const Banner = ({ purpose, title1, title2, desc1, desc2, buttonText, linkName, imageUrl }) => (
   <Flex flexWrap="wrap" justifyContent="center" alignItems="center" m="10">
@@ -20,7 +21,11 @@ const Banner = ({ purpose, title1, title2, desc1, desc2, buttonText, linkName, i
   </Flex>
 )
 
-export default function Home(propertiesForSale, propertiesForRent) {
+// There was no {} in here and that was making app return undefined
+export default function Home({ propertiesForSale, propertiesForRent }) {
+  useEffect(() => {
+    console.log(propertiesForRent)
+  }, [])
   return (
     <Box>
       <Banner
@@ -36,7 +41,7 @@ export default function Home(propertiesForSale, propertiesForRent) {
       <Flex flexWrap="wrap">
         {propertiesForRent.map((property) => <Property property={property} key={property.id} />)}
       </Flex>
-      <Banner 
+      <Banner
         purpose="BUY A HOME"
         title1="Find, Buy & Own Your"
         title2="Dream"
@@ -53,12 +58,13 @@ export default function Home(propertiesForSale, propertiesForRent) {
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps(context) {
   const propertyForSale = await fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-sale&hitsPerPage=6`)
   const propertyForRent = await fetchApi(`${baseUrl}/properties/list?locationExternalIDs=5002&purpose=for-rent&hitsPerPage=6`)
-
+  console.log(propertyForRent)
   return {
     props: {
+      data: 2,
       propertiesForSale: propertyForSale?.hits,
       propertiesForRent: propertyForRent?.hits,
     }
